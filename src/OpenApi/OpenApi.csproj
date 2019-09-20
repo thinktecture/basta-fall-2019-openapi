@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <DocumentationFile>OpenApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,12 +11,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0-rc3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="5.0.0-rc8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="OpenApi.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
