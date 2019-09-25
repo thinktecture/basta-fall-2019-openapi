@@ -30,7 +30,7 @@ namespace OpenApi.Models
       /// <summary>
       /// The price of the article.
       /// </summary>
-      /// <example>1,50</example>
+      /// <example>1</example>
       [Required]
       public float Price { get; set; }
    }
