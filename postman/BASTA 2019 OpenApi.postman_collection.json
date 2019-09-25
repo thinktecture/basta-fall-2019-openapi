@@ -32,6 +32,9 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -112,12 +115,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:5001/api/{{version}}/health",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/api/{{version}}/health",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "5001",
 									"path": [
 										"api",
 										"{{version}}",
@@ -191,12 +192,10 @@
 									}
 								],
 								"url": {
-									"raw": "https://localhost:5001/api/v1/weatherforecast",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/api/v1/weatherforecast",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "5001",
 									"path": [
 										"api",
 										"v1",
@@ -259,12 +258,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:5001/api/{{version}}/health",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/api/{{version}}/health",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "5001",
 									"path": [
 										"api",
 										"{{version}}",
@@ -342,12 +339,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:5001/api/{{version}}/weatherforecast?skip=3&take=3",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/api/{{version}}/weatherforecast?skip=3&take=3",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "5001",
 									"path": [
 										"api",
 										"{{version}}",
@@ -368,6 +363,162 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Fetches an article based on its number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "233c57eb-4873-4696-aab3-244f95abd192",
+										"exec": [
+											"var ajv = new require('ajv')({logger: console});",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test('Data structure is valid', function() {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).not.to.be.null;",
+											"    pm.expect(jsonData).not.to.be.undefined;",
+											"",
+											"    var schema = {",
+											"        \"type\": \"object\",",
+											"        \"properties\" : {",
+											"            \"number\": {",
+											"                \"type\": \"integer\"",
+											"            },",
+											"            \"name\": {",
+											"                \"type\": \"string\"",
+											"            },",
+											"            \"description\": {",
+											"                \"type\": \"string\"",
+											"            },",
+											"            \"price\": {",
+											"                \"type\": \"number\"",
+											"            }",
+											"        }",
+											"    };    ",
+											"    ",
+											"    pm.expect(ajv.validate(schema, jsonData)).to.be.true;",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "correlation-id",
+										"value": "some- id",
+										"description": "Optional correlation id. Can be any string. Should be unique per call. If provided, all logging will use this id to be able to correlate requests spanning multiple services."
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/v2/Article/:number",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v2",
+										"Article",
+										":number"
+									],
+									"variable": [
+										{
+											"key": "number",
+											"value": "1",
+											"description": "The article number."
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Article was not found.",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": {
+													"content": "Optional correlation id. Can be any string. Should be unique per call. If provided, all logging will use this id to be able to correlate requests spanning multiple services.",
+													"type": "text/plain"
+												},
+												"key": "correlation-id",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/v2/Article/<integer>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"Article",
+												"<integer>"
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n \"type\": \"<string>\",\n \"title\": \"<string>\",\n \"status\": \"<integer>\",\n \"detail\": \"<string>\",\n \"instance\": \"<string>\",\n \"extensions\": \"<object>\"\n}"
+								},
+								{
+									"name": "Article was found",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": {
+													"content": "Optional correlation id. Can be any string. Should be unique per call. If provided, all logging will use this id to be able to correlate requests spanning multiple services.",
+													"type": "text/plain"
+												},
+												"key": "correlation-id",
+												"value": "<string>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/api/v2/Article/<integer>",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"api",
+												"v2",
+												"Article",
+												"<integer>"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n \"name\": \"<string>\",\n \"number\": \"<integer>\",\n \"price\": \"<float>\",\n \"description\": \"<string>\"\n}"
+								}
+							]
 						}
 					],
 					"event": [
@@ -422,12 +573,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:5001/api/{{version}}/health",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/api/{{version}}/health",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "5001",
 									"path": [
 										"api",
 										"{{version}}",
@@ -459,12 +608,10 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:5001/api/{{version}}/weatherforecast?skip=3&take=3",
-									"protocol": "https",
+									"raw": "{{baseUrl}}/api/{{version}}/weatherforecast?skip=3&take=3",
 									"host": [
-										"localhost"
+										"{{baseUrl}}"
 									],
-									"port": "5001",
 									"path": [
 										"api",
 										"{{version}}",
@@ -572,13 +719,19 @@
 	],
 	"variable": [
 		{
-			"id": "b1f1cb7a-ae02-4391-bab6-5c8506944e2f",
+			"id": "46d2477b-194d-4957-8f31-34b510785120",
+			"key": "baseUrl",
+			"value": "https://localhost:5001",
+			"type": "string"
+		},
+		{
+			"id": "af0988b5-3364-4be9-9e27-0bacacc95537",
 			"key": "access_token",
 			"value": null,
 			"type": "any"
 		},
 		{
-			"id": "f072bcf4-3ef9-41fb-ae24-b52575f49f2b",
+			"id": "c789739b-4220-4f64-b032-7fbc2c5a5851",
 			"key": "version",
 			"value": "v1",
 			"type": "string"
