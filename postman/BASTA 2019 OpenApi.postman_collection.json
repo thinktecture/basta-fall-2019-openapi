@@ -22,8 +22,9 @@
 							"",
 							"pm.test(\"Response contains access_token\", () => {",
 							"    pm.expect(accessToken).to.exist;",
-							"    pm.environment.set(\"access_token\", accessToken);",
 							"});",
+							"",
+							"pm.environment.set(\"access_token\", accessToken);",
 							""
 						],
 						"type": "text/javascript"
@@ -134,6 +135,8 @@
 									"script": {
 										"id": "be5844a6-7ea4-489f-9359-d586f7034318",
 										"exec": [
+											"var ajv = new require('ajv')({logger: console});",
+											"",
 											"pm.test(\"Status code is 200\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
@@ -143,7 +146,6 @@
 											"pm.test('Data structure is valid', function() {",
 											"    pm.expect(jsonData).not.to.be.null;",
 											"    pm.expect(jsonData).not.to.be.undefined;",
-											"    pm.expect(jsonData).to.be.an('array');",
 											"",
 											"    var schema = {",
 											"        \"type\": \"array\",",
@@ -166,7 +168,7 @@
 											"        }",
 											"    };    ",
 											"    ",
-											"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;",
+											"    pm.expect(ajv.validate(schema, jsonData)).to.be.true;",
 											"});",
 											"",
 											"pm.test(\"Have 5 forecasts\", function () {",
@@ -280,6 +282,8 @@
 									"script": {
 										"id": "69f727d3-8030-4616-9f22-f76e8a36837f",
 										"exec": [
+											"var ajv = new require('ajv')({logger: console});",
+											"",
 											"pm.test(\"Status code is 200\", function () {",
 											"    pm.response.to.have.status(200);",
 											"});",
@@ -322,7 +326,7 @@
 											"        }",
 											"    };    ",
 											"    ",
-											"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;",
+											"    pm.expect(ajv.validate(schema, jsonData)).to.be.true;",
 											"});",
 											"",
 											"pm.test(\"Have 3 forecasts\", function () {",
@@ -352,11 +356,13 @@
 									"query": [
 										{
 											"key": "skip",
-											"value": "3"
+											"value": "3",
+											"description": "The articles to skip while fetching."
 										},
 										{
 											"key": "take",
-											"value": "3"
+											"value": "3",
+											"description": "The amount of articles to return."
 										}
 									]
 								}
@@ -432,7 +438,7 @@
 							"response": []
 						},
 						{
-							"name": "Get a forecast should not exist in v3",
+							"name": "Forecast should not exist in v3",
 							"event": [
 								{
 									"listen": "test",
@@ -566,13 +572,13 @@
 	],
 	"variable": [
 		{
-			"id": "58779822-a17e-4610-afcd-a4098002f029",
+			"id": "b1f1cb7a-ae02-4391-bab6-5c8506944e2f",
 			"key": "access_token",
 			"value": null,
 			"type": "any"
 		},
 		{
-			"id": "f490f8ee-4ec6-454b-9eff-f48884567a97",
+			"id": "f072bcf4-3ef9-41fb-ae24-b52575f49f2b",
 			"key": "version",
 			"value": "v1",
 			"type": "string"
